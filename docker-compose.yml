@@ -1,0 +1,6 @@
+version: '3.4'
+services:
+
+ guacamole:
+  image: linuxserver/guacd
+  restart: unless-stopped
