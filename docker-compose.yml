@@ -1,37 +1,37 @@
 version: '3.4'
 services:
 
-  guacamole-postgres:
-   image: postgres
-   restart: unless-stopped
-   environment:
-     PGDATA: /var/lib/postgresql/data/guacamole
-     POSTGRES_DB: ${GUACAMOLE_DB_NAME}
-     POSTGRES_USER: ${GUACAMOLE_DB_USERNAME}
-     POSTGRES_PASSWORD: ${GUACAMOLE_DB_PASSWORD}
-   volumes:
-    - ./etc/guacamole/docker-entrypoint-initdb.d/:/docker-entrypoint-initdb.d:ro
-    - pgdata:/var/lib/postgresql/data:rw
-
-  guacamole-cd:
-   image: guacamole/guacd
-   restart: unless-stopped
-
-  guacamole:
-   image: guacamole/guacamole
-   restart: unless-stopped
-   depends_on:
-    - guacamole-postgres
-    - guacamole-cd
-   environment:
-    GUACD_HOSTNAME: guacamole-cd 
-    POSTGRES_HOSTNAME: guacamole-postgres
-    POSTGRES_DATABASE: ${GUACAMOLE_DB_NAME}
+ guacamole-postgres:
+  image: postgres
+  restart: unless-stopped
+  environment:
+    PGDATA: /var/lib/postgresql/data/guacamole
+    POSTGRES_DB: ${GUACAMOLE_DB_NAME}
     POSTGRES_USER: ${GUACAMOLE_DB_USERNAME}
     POSTGRES_PASSWORD: ${GUACAMOLE_DB_PASSWORD}
-   volumes:
-    - ./etc/guacamole/docker-entrypoint-initdb.d/:/docker-entrypoint-initdb.d/
+  volumes:
+   - ./etc/guacamole/docker-entrypoint-initdb.d/:/docker-entrypoint-initdb.d:ro
+   - pgdata:/var/lib/postgresql/data:rw
 
+ guacamole-cd:
+  image: guacamole/guacd
+  restart: unless-stopped
+
+ guacamole:
+  image: guacamole/guacamole
+  restart: unless-stopped
+  depends_on:
+   - guacamole-postgres
+   - guacamole-cd
+  environment:
+   GUACD_HOSTNAME: guacamole-cd 
+   POSTGRES_HOSTNAME: guacamole-postgres
+   POSTGRES_DATABASE: ${GUACAMOLE_DB_NAME}
+   POSTGRES_USER: ${GUACAMOLE_DB_USERNAME}
+   POSTGRES_PASSWORD: ${GUACAMOLE_DB_PASSWORD}
+  volumes:
+   - ./etc/guacamole/docker-entrypoint-initdb.d/:/docker-entrypoint-initdb.d/
+ 
 volumes:
   pgdata:
   gcdata:
